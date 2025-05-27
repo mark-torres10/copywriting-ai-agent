@@ -3,6 +3,10 @@
 ## What is this?
 A demo platform that showcases how AI can instantly learn your brand's unique voice and generate high-quality, on-brand marketing content—at the click of a button.
 
+## 🎥 Demo Video Walkthrough
+
+> **Watch:** [Loom Video Demo – See the AI Agent in Action!](https://www.loom.com/share/f9bf8a4491c7465bb780e58fbb0104d7)
+
 ## Who is it for?
 - **Marketing teams** who want to scale content creation without sacrificing brand consistency.
 - **Brand managers** seeking to ensure every piece of copy matches their tone and style.
