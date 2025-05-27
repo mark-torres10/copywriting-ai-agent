@@ -15,3 +15,4 @@ load_dotenv(env_path)
 
 # Export commonly used environment variables
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")

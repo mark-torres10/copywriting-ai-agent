@@ -8,8 +8,11 @@ altair==5.5.0
     # via streamlit
 annotated-types==0.7.0
     # via pydantic
+anthropic==0.52.0
+    # via langchain-anthropic
 anyio==4.9.0
     # via
+    #   anthropic
     #   httpx
     #   openai
 attrs==25.3.0
@@ -30,7 +33,9 @@ charset-normalizer==3.4.2
 click==8.2.1
     # via streamlit
 distro==1.9.0
-    # via openai
+    # via
+    #   anthropic
+    #   openai
 gitdb==4.0.12
     # via gitpython
 gitpython==3.1.44
@@ -41,6 +46,7 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via
+    #   anthropic
     #   langsmith
     #   openai
 idna==3.10
@@ -53,7 +59,9 @@ jinja2==3.1.6
     #   altair
     #   pydeck
 jiter==0.10.0
-    # via openai
+    # via
+    #   anthropic
+    #   openai
 jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
@@ -64,9 +72,12 @@ jsonschema-specifications==2025.4.1
     # via jsonschema
 langchain==0.3.25
     # via -r requirements.in
+langchain-anthropic==0.3.14
+    # via -r requirements.in
 langchain-core==0.3.62
     # via
     #   langchain
+    #   langchain-anthropic
     #   langchain-openai
     #   langchain-text-splitters
 langchain-openai==0.3.18
@@ -108,7 +119,9 @@ pyarrow==20.0.0
     # via streamlit
 pydantic==2.11.5
     # via
+    #   anthropic
     #   langchain
+    #   langchain-anthropic
     #   langchain-core
     #   langsmith
     #   openai
@@ -151,6 +164,7 @@ smmap==5.0.2
     # via gitdb
 sniffio==1.3.1
     # via
+    #   anthropic
     #   anyio
     #   openai
 sqlalchemy==2.0.41
@@ -172,6 +186,7 @@ tqdm==4.67.1
 typing-extensions==4.13.2
     # via
     #   altair
+    #   anthropic
     #   anyio
     #   langchain-core
     #   openai

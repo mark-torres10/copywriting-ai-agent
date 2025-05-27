@@ -5,9 +5,10 @@ import os
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
 from data.news_articles.copy import articles
+from lib.load_env_vars import CLAUDE_API_KEY
 from prompts import summarizer_prompt
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,9 +18,7 @@ agent_dir = os.path.join(root_project_dir, "agents")
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 export_fp = os.path.join(current_dir, f"article_summaries_{timestamp}.json")
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
+llm = ChatAnthropic(model="claude-3-7-sonnet-20250219", temperature=0, anthropic_api_key=CLAUDE_API_KEY)
 
 def load_articles() -> list[dict]:
     return articles
@@ -46,7 +45,6 @@ def summarize_articles(articles: list[str]) -> dict:
         article_to_summary[title] = {
             "metadata": metadata,
             "original_text": text,
-            "timestamp": article["timestamp"],
             "summary": summary,
         }
         print(f"Summarized article {title} (Article {i+1} of {total_articles}).")
@@ -55,7 +53,7 @@ def summarize_articles(articles: list[str]) -> dict:
 
 def export_summaries(summaries: dict) -> None:
     """Exports the summaries to a JSON file."""
-    with open("summaries.json", "w") as f:
+    with open(export_fp, "w") as f:
         json.dump(summaries, f)
 
 
