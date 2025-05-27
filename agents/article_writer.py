@@ -7,7 +7,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 
 from lib.load_env_vars import CLAUDE_API_KEY
-from prompts import article_writer_prompt
+from agents.prompts import article_writer_prompt
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 writing_styles_dir = os.path.join(current_dir, "writing_styles")
