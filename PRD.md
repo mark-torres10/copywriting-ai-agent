@@ -34,14 +34,8 @@ Build a Streamlit-based AI system that:
 - Interactive Streamlit UI
   - Input brand URLs or text
   - Provide topic or paste link
-  - Show generated content with side-by-side original copy
-  - LLM scoring results
   - Export to Google Docs
   - Feedback: Includes a text box below the generated draft. Users can submit feedback on the generation . Submissions are saved as JSON records (includes prompt, draft, and feedback). These records are used to ground future prompts for improved tuning.
-
-- Google Docs Export
-  - Uses existing OAuth integration
-  - Pushes generated output to user-selected Google Drive folder.
 
 Proposed Streamlit layout:
 
