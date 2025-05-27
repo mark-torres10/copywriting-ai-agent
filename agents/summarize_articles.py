@@ -16,7 +16,7 @@ root_project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 agent_dir = os.path.join(root_project_dir, "agents")
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-export_fp = os.path.join(current_dir, f"article_summaries_{timestamp}.json")
+export_fp = os.path.join(current_dir, "summaries", f"article_summaries_{timestamp}.json")
 
 llm = ChatAnthropic(model="claude-3-7-sonnet-20250219", temperature=0, anthropic_api_key=CLAUDE_API_KEY)
 
@@ -40,9 +40,10 @@ def summarize_articles(articles: list[str]) -> dict:
         print(f"Summarizing article {i+1} of {total_articles}...")
         metadata = article["metadata"]
         title = metadata["title"]
+        source = metadata["source"]
         text = article["text"]
         summary = summarize_article(text)
-        article_to_summary[title] = {
+        article_to_summary[source] = {
             "metadata": metadata,
             "original_text": text,
             "summary": summary,

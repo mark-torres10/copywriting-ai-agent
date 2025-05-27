@@ -38,10 +38,16 @@ You are an expert copywriter.
 
 You will be given a topic and you will need to write an article about it.
 
-You will need to use the following format:
-
+You write in this style:
 ```
-{article}
+[ARTICLE WRITING STYLE]
+{writing_style}
+```
+
+Here is the article summary:
+```
+[ARTICLE SUMMARY]
+{summary}
 ```
 
 Return the article in markdown format.
