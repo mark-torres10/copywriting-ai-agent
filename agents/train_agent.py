@@ -13,17 +13,19 @@ from langchain_openai import ChatOpenAI
 
 from data.samples.website.blogposts import blogposts
 from data.samples.website.copy import copy
-from lib.env_vars import OPENAI_API_KEY
 from prompts import writing_style_learner_prompt
 
 # hacky solution, direnv isn't working.
 root_project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 agent_dir = os.path.join(root_project_dir, "agents")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 export_fp = os.path.join(agent_dir, "writing_styles")
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 filename = f"writing_style_{timestamp}.md"
 export_fp = os.path.join(export_fp, filename)
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
 
 
 def load_training_data() -> list[dict]:
@@ -40,8 +42,6 @@ def train_agent(training_data: list[str]) -> str:
         for i, text in enumerate(training_data)
     ]
     joined_texts = "\n".join(joined_texts)
-
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     prompt = ChatPromptTemplate.from_template(writing_style_learner_prompt)
     chain = prompt | llm | StrOutputParser()
     return chain.invoke({"texts": joined_texts})
