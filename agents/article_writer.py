@@ -41,6 +41,13 @@ def write_blog_post_about_article(article_url: str) -> str:
     chain = prompt | llm | StrOutputParser()
     return chain.invoke({"writing_style": writing_style, "summary": article_summary})
 
+def write_blog_post_with_custom_writing_style(article_url: str, custom_writing_style: str) -> str:
+    """Writes a blog post about an article using a custom writing style (with the default prompt template)."""
+    article_summary = article_summaries[article_url]
+    prompt = ChatPromptTemplate.from_template(article_writer_prompt)
+    chain = prompt | llm | StrOutputParser()
+    return chain.invoke({"writing_style": custom_writing_style, "summary": article_summary})
+
 
 if __name__ == "__main__":
     article_url = "https://themarijuanaherald.com/2025/05/texas-house-of-representatives-approves-ban-on-hemp-derived-thc/"

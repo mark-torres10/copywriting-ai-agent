@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 import time
+import hashlib
+from agents.prompts import article_writer_prompt
 
 # --- Import article_writer functions dynamically ---
 article_writer_path = Path("agents/article_writer.py").resolve()
@@ -98,15 +100,52 @@ if selected_url:
 
     st.markdown("---")
     st.subheader("2. Generate AI-Written Post")
+
+    # --- Writing style editing and hash logic ---
+    # Dynamically import article_writer to get load_latest_writing_style
+    article_writer_path = Path("agents/article_writer.py").resolve()
+    spec = importlib.util.spec_from_file_location("article_writer", article_writer_path)
+    article_writer = importlib.util.module_from_spec(spec)
+    sys.modules["article_writer"] = article_writer
+    spec.loader.exec_module(article_writer)
+    latest_writing_style = article_writer.load_latest_writing_style()
+    if "writing_style_text" not in st.session_state or st.session_state.selected_article != st.session_state.get("last_writing_style_article"):
+        st.session_state.writing_style_text = latest_writing_style
+        st.session_state.last_writing_style_article = selected_url
+        st.session_state.writing_style_hash = hashlib.sha256(latest_writing_style.encode("utf-8")).hexdigest()
+    writing_style_text = st.session_state.writing_style_text
+    with st.expander("See the AI's writing style", expanded=False):
+        new_writing_style_text = st.text_area(
+            "Edit the AI's writing style below:",
+            value=writing_style_text,
+            key="writing_style_text_area",
+            height=300
+        )
+    # Reset generated_post if writing style changed
+    if new_writing_style_text != st.session_state.writing_style_text:
+        st.session_state.generated_post = None
+        st.session_state.writing_style_text = new_writing_style_text
+    current_writing_style_hash = hashlib.sha256(st.session_state.writing_style_text.encode("utf-8")).hexdigest()
+
     if st.session_state.generated_post is None:
         if st.button("Write AI-Generated Post", key="write_post"):
             with st.spinner("AI is writing your blog post..."):
-                time.sleep(3)
-                # Use precomputed blog post
-                if selected_url in precomputed_blog_posts:
-                    st.session_state.generated_post = precomputed_blog_posts[selected_url]["generated_text"]
+                if current_writing_style_hash == st.session_state.writing_style_hash:
+                    time.sleep(3)
+                    # Use precomputed blog post
+                    if selected_url in precomputed_blog_posts:
+                        st.session_state.generated_post = precomputed_blog_posts[selected_url]["generated_text"]
+                        print("[DEBUG] Used precomputed blog post.")
+                    else:
+                        st.error("No precomputed blog post found for this article.")
+                        print("[DEBUG] No precomputed blog post found.")
                 else:
-                    st.error("No precomputed blog post found for this article.")
+                    print("[DEBUG] Using custom writing style for blog post.")
+                    # Use custom writing style with default prompt
+                    st.session_state.generated_post = article_writer.write_blog_post_with_custom_writing_style(
+                        selected_url, st.session_state.writing_style_text
+                    )
+                    print("[DEBUG] Used custom writing style for blog post.")
     if st.session_state.generated_post:
         st.info(
             """
